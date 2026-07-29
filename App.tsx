@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, View, Text, StyleSheet, Pressable, Linking, ScrollView, Platform, Image, useWindowDimensions } from 'react-native';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import Feather from '@expo/vector-icons/Feather';
 
 type Route = 'home' | 'car' | 'sponsor' | 'contact';
 
@@ -106,9 +108,21 @@ function useResponsive() {
   };
 }
 
-function Pill({ label, onPress }: { label: string; onPress: () => void }) {
+type PillIcon = 'linkedin' | 'instagram' | 'tiktok' | 'anchor';
+
+function Pill({ label, icon, onPress }: { label: string; icon: PillIcon; onPress: () => void }) {
   return (
-    <Pressable onPress={onPress} style={({ pressed }) => [styles.pill, pressed && styles.pillPressed]}>
+    <Pressable
+      onPress={onPress}
+      style={({ pressed }) => [styles.pill, pressed && styles.pillPressed]}
+      accessibilityRole="link"
+      accessibilityLabel={label}
+    >
+      {icon === 'anchor' ? (
+        <Feather name="anchor" size={14} color={PILL_FG} />
+      ) : (
+        <FontAwesome6 name={icon} size={14} color={PILL_FG} brand />
+      )}
       <Text style={styles.pillText}>{label}</Text>
     </Pressable>
   );
@@ -191,10 +205,10 @@ function Home() {
 
       <Text style={styles.subtitle}>Follow the Team</Text>
       <View style={styles.pillRow}>
-        <Pill label="LinkedIn" onPress={openLinkedIn} />
-        <Pill label="Instagram" onPress={openInstagram} />
-        <Pill label="TikTok" onPress={openTiktok} />
-        <Pill label="AnchorLink" onPress={openAnchorLink} />
+        <Pill label="LinkedIn" icon="linkedin" onPress={openLinkedIn} />
+        <Pill label="Instagram" icon="instagram" onPress={openInstagram} />
+        <Pill label="TikTok" icon="tiktok" onPress={openTiktok} />
+        <Pill label="AnchorLink" icon="anchor" onPress={openAnchorLink} />
       </View>
 
       <Pressable style={({ pressed }) => [styles.sponsorButton, pressed && styles.sponsorButtonPressed]} onPress={openEmail}>
@@ -362,6 +376,7 @@ const GOLD = '#a89669';
 const GOLD_DIM = '#8a7a55';
 const BODY = '#9a9a95';
 const RULE = '#1e1e1e';
+const PILL_FG = '#d8cbaa';
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: '#000' },
@@ -404,9 +419,9 @@ const styles = StyleSheet.create({
   specValue: { color: '#e8e8e4', fontSize: 14, textAlign: 'right', flexShrink: 1 },
   specValueNarrow: { textAlign: 'left' },
   pillRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 24 },
-  pill: { borderWidth: 1, borderColor: '#4a4235', borderRadius: 999, paddingVertical: 8, paddingHorizontal: 14 },
+  pill: { flexDirection: 'row', alignItems: 'center', gap: 7, borderWidth: 1, borderColor: '#4a4235', borderRadius: 999, paddingVertical: 8, paddingHorizontal: 14 },
   pillPressed: { borderColor: GOLD, opacity: 0.8 },
-  pillText: { color: '#d8cbaa', fontSize: 13 },
+  pillText: { color: PILL_FG, fontSize: 13 },
   sponsorButton: { backgroundColor: GOLD, paddingVertical: 12, paddingHorizontal: 18, borderRadius: 8, alignSelf: 'flex-start', marginTop: 4, marginBottom: 12 },
   sponsorButtonPressed: { opacity: 0.85 },
   sponsorButtonText: { color: '#3a3222', fontWeight: '500', fontSize: 14 },
