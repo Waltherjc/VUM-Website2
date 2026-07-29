@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, View, Text, StyleSheet, Pressable, Linking, ScrollView, Platform, Image } from 'react-native';
+import { SafeAreaView, View, Text, StyleSheet, Pressable, Linking, ScrollView, Platform, Image, useWindowDimensions } from 'react-native';
 
 type Route = 'home' | 'car' | 'sponsor' | 'contact';
 
@@ -24,6 +24,7 @@ const TEAM_MEMBERS: Member[] = [
 
 export default function App() {
   const [route, setRoute] = useState<Route>('home');
+  const r = useResponsive();
 
   useEffect(() => {
     // Handle hash routing on web so links are bookmarkable
@@ -54,7 +55,7 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.safe}>
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingHorizontal: r.gutter }]}>
         <View style={styles.headerInner}>
           <View style={styles.brandBlock}>
             <Image
@@ -77,7 +78,7 @@ export default function App() {
         </View>
       </View>
 
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView contentContainerStyle={[styles.content, { paddingHorizontal: r.gutter }]}>
         {route === 'home' && <Home />}
         {route === 'car' && <Car />}
         {route === 'sponsor' && <Sponsor />}
@@ -91,6 +92,25 @@ export default function App() {
   );
 }
 
+function useResponsive() {
+  const { width } = useWindowDimensions();
+  const t = Math.min(Math.max((width - 360) / 740, 0), 1);
+  const fluid = (min: number, max: number) => Math.round(min + (max - min) * t);
+
+  const titleSize = fluid(25, 38);
+  const bodySize = fluid(15, 17);
+  const statSize = fluid(22, 30);
+
+  return {
+    width,
+    isNarrow: width < 700,
+    gutter: fluid(16, 32),
+    title: { fontSize: titleSize, lineHeight: Math.round(titleSize * 1.15) },
+    body: { fontSize: bodySize, lineHeight: Math.round(bodySize * 1.6) },
+    stat: { fontSize: statSize, lineHeight: Math.round(statSize * 1.15) },
+  };
+}
+
 function Pill({ label, onPress }: { label: string; onPress: () => void }) {
   return (
     <Pressable onPress={onPress} style={({ pressed }) => [styles.pill, pressed && styles.pillPressed]}>
@@ -100,10 +120,11 @@ function Pill({ label, onPress }: { label: string; onPress: () => void }) {
 }
 
 function SpecRow({ label, value }: { label: string; value: string }) {
+  const r = useResponsive();
   return (
-    <View style={styles.specRow}>
+    <View style={[styles.specRow, r.isNarrow && styles.specRowNarrow]}>
       <Text style={styles.specLabel}>{label}</Text>
-      <Text style={styles.specValue}>{value}</Text>
+      <Text style={[styles.specValue, r.isNarrow && styles.specValueNarrow]}>{value}</Text>
     </View>
   );
 }
@@ -130,6 +151,7 @@ function NavButton({ label, onPress, active }: { label: string; onPress: () => v
 
 function Home() {
   const [photoWidth, setPhotoWidth] = useState(0);
+  const r = useResponsive();
   const openLinkedIn = () => Linking.openURL('https://www.linkedin.com/company/vanderbiltmotorsports/');
   const openAnchorLink = () => Linking.openURL('https://anchorlink.vanderbilt.edu/organization/vumotorsports');
   const openInstagram = () => Linking.openURL('https://www.instagram.com/vanderbilt_motorsports/');
@@ -139,7 +161,7 @@ function Home() {
   return (
     <View style={styles.page}>
       <Text style={styles.eyebrow}>VANDERBILT UNIVERSITY</Text>
-      <Text style={styles.title}>Welcome to Vanderbilt University Motorsports</Text>
+      <Text style={[styles.title, r.title]}>Welcome to Vanderbilt University Motorsports</Text>
       <View style={styles.rule} />
       
       <View
@@ -154,20 +176,20 @@ function Home() {
         />
       </View>
 
-      <Text style={styles.paragraph}>
+      <Text style={[styles.paragraph, r.body]}>
         Vanderbilt University Motorsports (VUM) is a student-led engineering team at Vanderbilt University. We design, build, and compete with formula-style race cars
         in collegiate motorsport competitions. Our mission is to provide hands-on engineering experience, promote STEM education, and represent Vanderbilt with
         innovation and performance.
       </Text>
 
       <Text style={styles.subtitle}>What We Do</Text>
-      <Text style={styles.paragraph}>
+      <Text style={[styles.paragraph, r.body]}>
         Each year our multidisciplinary team of undergraduates works across chassis, powertrain, electronics, and business to produce a competitive
         racecar. Students gain experience in CAD, manufacturing, testing, data acquisition, and project management.
       </Text>
 
       <Text style={styles.subtitle}>Get Involved</Text>
-      <Text style={styles.paragraph}>
+      <Text style={[styles.paragraph, r.body]}>
         We welcome students from all majors. If you're interested in joining, check the Contact page to reach out to team members or visit our Sponsorship page
         to support the program.
       </Text>
@@ -190,13 +212,14 @@ function Home() {
 
 function Car() {
   const [photoWidth, setPhotoWidth] = useState(0);
+  const r = useResponsive();
 
   return (
     <View style={styles.page}>
       <Text style={styles.eyebrow}>2026 COMPETITION CAR</Text>
-      <Text style={styles.title}>Current Car — VU-83</Text>
+      <Text style={[styles.title, r.title]}>Current Car — VU-83</Text>
       <View style={styles.rule} />
-      <Text style={styles.paragraph}>VU-83 is the car that the team used at the Formula SAE IC Michigan 2026 competition at Michigan International Speedway.</Text>
+      <Text style={[styles.paragraph, r.body]}>VU-83 is the car that the team used at the Formula SAE IC Michigan 2026 competition at Michigan International Speedway.</Text>
 
       <View
         style={styles.photoContainer}
@@ -212,15 +235,15 @@ function Car() {
       
       <View style={styles.statRow}>
         <View>
-          <Text style={styles.statValue}>3rd</Text>
+          <Text style={[styles.statValue, r.stat]}>3rd</Text>
           <Text style={styles.statLabel}>EFFICIENCY</Text>
         </View>
         <View>
-          <Text style={styles.statValue}>110+</Text>
+          <Text style={[styles.statValue, r.stat]}>110+</Text>
           <Text style={styles.statLabel}>TEAMS</Text>
         </View>
         <View>
-          <Text style={styles.statValue}>40 lb</Text>
+          <Text style={[styles.statValue, r.stat]}>40 lb</Text>
           <Text style={styles.statLabel}>LIGHTEST MARGIN</Text>
         </View>
       </View>
@@ -232,7 +255,7 @@ function Car() {
       <SpecRow label="Brakes" value="Ventilated discs, custom calipers" />
 
       <Text style={styles.subtitle}>HIGHLIGHTS</Text>
-      <Text style={styles.paragraph}>
+      <Text style={[styles.paragraph, r.body]}>
         Awarded third in efficiency for fuel use over the set distance, made possible by running the lightest car in the competition by roughly 40 lb.
       </Text>
     </View>
@@ -240,39 +263,40 @@ function Car() {
 }
 
 function Sponsor() {
+  const r = useResponsive();
   const openEmail = () => Linking.openURL('mailto:vanderbiltmotorsports@vanderbilt.edu?subject=VUM+Sponsorship');
   const openDonate = () => Linking.openURL('https://anchorlink.vanderbilt.edu/organization/vumotorsports');
 
   return (
     <View style={styles.page}>
       <Text style={styles.eyebrow}>PARTNER WITH US</Text>
-      <Text style={styles.title}>Support Vanderbilt University Motorsports</Text>
+      <Text style={[styles.title, r.title]}>Support Vanderbilt University Motorsports</Text>
       <View style={styles.rule} />
 
-      <Text style={styles.paragraph}>
+      <Text style={[styles.paragraph, r.body]}>
         Sponsorships helps our students purchase parts, access manufacturing resources, attend competitions, and focus on engineering education. We offer
         corporate and individual sponsorship packages with recognition opportunities, testing access, and collaborative engineering projects.
       </Text>
 
     
-      <Text style={styles.paragraph}>
+      <Text style={[styles.paragraph, r.body]}>
         We also welcome in-kind support such as materials, machining time, software licenses, and mentorship. Thank you for considering supporting VUM.
       </Text>
 
       <Text style={styles.subtitle}>Sponsorship Tiers</Text>
-      <Text style={styles.paragraph}>• Bronze — Logo on team page, social media mention</Text>
-      <Text style={styles.paragraph}>• Silver — Bronze benefits + logo on the car and event banners</Text>
-      <Text style={styles.paragraph}>• Gold — Silver benefits + engineering collaboration and on-site demonstrations</Text>
+      <Text style={[styles.paragraph, r.body]}>• Bronze — Logo on team page, social media mention</Text>
+      <Text style={[styles.paragraph, r.body]}>• Silver — Bronze benefits + logo on the car and event banners</Text>
+      <Text style={[styles.paragraph, r.body]}>• Gold — Silver benefits + engineering collaboration and on-site demonstrations</Text>
 
       <Text style={styles.subtitle}>Contact to Sponsor</Text>
-      <Text style={styles.paragraph}>For sponsorship inquiries and custom packages, email us:</Text>
+      <Text style={[styles.paragraph, r.body]}>For sponsorship inquiries and custom packages, email us:</Text>
 
       <Pressable style={styles.sponsorButton} onPress={openEmail}>
         <Text style={styles.sponsorButtonText}>Email our Team</Text>
       </Pressable>
 
       <Text style={styles.subtitle}>Donations</Text>
-      <Text style={styles.paragraph}>If you are interesting in donating to the team, click below:</Text>
+      <Text style={[styles.paragraph, r.body]}>If you are interesting in donating to the team, click below:</Text>
 
       <Pressable style={styles.sponsorButton} onPress={openDonate}>
         <Text style={styles.sponsorButtonText}>Donate</Text>
@@ -283,6 +307,7 @@ function Sponsor() {
 }
 
 function Contact() {
+  const r = useResponsive();
   const openMail = (email: string) => Linking.openURL(`mailto:${email}`);
 
   const executiveBoard = TEAM_MEMBERS.filter(m => m.category === 'executive');
@@ -322,10 +347,10 @@ function Contact() {
   return (
     <View style={styles.page}>
       <Text style={styles.eyebrow}>GET IN TOUCH</Text>
-      <Text style={styles.title}>Contact the Team</Text>
+      <Text style={[styles.title, r.title]}>Contact the Team</Text>
       <View style={styles.rule} />
 
-      <Text style={styles.paragraph}>
+      <Text style={[styles.paragraph, r.body]}>
         Reach out to our student leads for specific questions about engineering, sponsorship, or joining the team.
       </Text>
 
@@ -369,16 +394,18 @@ const styles = StyleSheet.create({
   title: { fontFamily: serif, fontSize: 38, color: '#fff', marginBottom: 8, lineHeight: 42 },
   rule: { width: 40, height: 2, backgroundColor: GOLD, marginBottom: 20 },
   subtitle: { color: GOLD_DIM, fontSize: 11, letterSpacing: 1.4, marginTop: 36, marginBottom: 10 },
-  paragraph: { fontSize: 16, color: BODY, lineHeight: 26, marginBottom: 16, maxWidth: 680 },
+  paragraph: { fontSize: 16, color: BODY, lineHeight: 26, marginBottom: 16, maxWidth: 680, width: '100%' },
   photoContainer: { marginBottom: 28, borderRadius: 8, overflow: 'hidden' },
   photo: { width: '100%', resizeMode: 'cover' },
   carPhoto: { width: '100%', resizeMode: 'cover' },
-  statRow: { flexDirection: 'row', gap: 32, flexWrap: 'wrap', paddingVertical: 18, borderTopWidth: 1, borderBottomWidth: 1, borderColor: RULE, marginBottom: 8 },
+  statRow: { flexDirection: 'row', gap: 24, rowGap: 16, flexWrap: 'wrap', paddingVertical: 18, borderTopWidth: 1, borderBottomWidth: 1, borderColor: RULE, marginBottom: 8 },
   statValue: { color: GOLD, fontFamily: serif, fontSize: 30, lineHeight: 34 },
   statLabel: { color: '#777', fontSize: 11, letterSpacing: 0.8, marginTop: 4 },
-  specRow: { flexDirection: 'row', justifyContent: 'space-between', gap: 20, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: RULE, maxWidth: 680 },
+  specRow: { flexDirection: 'row', justifyContent: 'space-between', gap: 20, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: RULE, maxWidth: 680, width: '100%' },
+  specRowNarrow: { flexDirection: 'column', gap: 4 },
   specLabel: { color: '#777', fontSize: 12, letterSpacing: 0.6 },
   specValue: { color: '#e8e8e4', fontSize: 14, textAlign: 'right', flexShrink: 1 },
+  specValueNarrow: { textAlign: 'left' },
   pillRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 24 },
   pill: { borderWidth: 1, borderColor: '#4a4235', borderRadius: 999, paddingVertical: 8, paddingHorizontal: 14 },
   pillPressed: { borderColor: GOLD, opacity: 0.8 },
@@ -391,7 +418,7 @@ const styles = StyleSheet.create({
   memberSection: { marginTop: 36 },
   sectionTitle: { color: GOLD_DIM, fontSize: 11, letterSpacing: 1.4, marginBottom: 14 },
   memberGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
-  member: { width: 250, padding: 14, borderWidth: 1, borderColor: '#2a2a2a', borderRadius: 8, backgroundColor: '#0d0d0d' },
+  member: { flexGrow: 1, flexBasis: 240, padding: 14, borderWidth: 1, borderColor: '#2a2a2a', borderRadius: 8, backgroundColor: '#0d0d0d' },
   memberPressed: { borderColor: '#4a4235' },
   avatar: { width: 30, height: 30, borderRadius: 15, backgroundColor: '#2c2617', alignItems: 'center', justifyContent: 'center', marginBottom: 10 },
   avatarText: { color: '#c9b688', fontSize: 11 },
