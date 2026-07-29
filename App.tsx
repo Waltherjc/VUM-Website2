@@ -189,7 +189,7 @@ function Home() {
         to support the program.
       </Text>
 
-      <Text style={styles.subtitle}>FOLLOW THE TEAM</Text>
+      <Text style={styles.subtitle}>Follow the Team</Text>
       <View style={styles.pillRow}>
         <Pill label="LinkedIn" onPress={openLinkedIn} />
         <Pill label="Instagram" onPress={openInstagram} />
@@ -243,13 +243,13 @@ function Car() {
         </View>
       </View>
 
-      <Text style={styles.subtitle}>SPECIFICATIONS</Text>
+      <Text style={styles.subtitle}>Specifications</Text>
       <SpecRow label="Chassis" value="Hand-assembled steel tubing" />
       <SpecRow label="Powertrain" value="439cc Yamaha YFZ450S" />
       <SpecRow label="Suspension" value="Double-wishbone, adjustable dampers" />
       <SpecRow label="Brakes" value="Ventilated discs, custom calipers" />
 
-      <Text style={styles.subtitle}>HIGHLIGHTS</Text>
+      <Text style={styles.subtitle}>Highlights</Text>
       <Text style={[styles.paragraph, r.prose]}>
         Awarded third in efficiency for fuel use over the set distance, made possible by running the lightest car in the competition by roughly 40 lb.
       </Text>
@@ -390,7 +390,7 @@ const styles = StyleSheet.create({
   eyebrow: { color: GOLD_DIM, fontSize: 11, letterSpacing: 1.4, marginBottom: 6 },
   title: { fontFamily: serif, fontSize: 38, color: '#fff', marginBottom: 8, lineHeight: 42 },
   rule: { width: 40, height: 2, backgroundColor: GOLD, marginBottom: 20 },
-  subtitle: { color: GOLD_DIM, fontSize: 11, letterSpacing: 1.4, marginTop: 36, marginBottom: 10 },
+  subtitle: { color: GOLD, fontFamily: serif, fontSize: 21, lineHeight: 27, marginTop: 36, marginBottom: 10 },
   paragraph: { fontSize: 16, color: BODY, lineHeight: 26, marginBottom: 16, width: '100%' },
   photoContainer: { marginBottom: 28, borderRadius: 8, overflow: 'hidden' },
   photo: { width: '100%', resizeMode: 'cover' },
@@ -413,7 +413,7 @@ const styles = StyleSheet.create({
   footer: { paddingVertical: 20, paddingHorizontal: 24, borderTopWidth: 1, borderTopColor: RULE, alignItems: 'center', backgroundColor: '#000' },
   footerText: { color: '#666', fontSize: 12 },
   memberSection: { marginTop: 36 },
-  sectionTitle: { color: GOLD_DIM, fontSize: 11, letterSpacing: 1.4, marginBottom: 14 },
+  sectionTitle: { color: GOLD, fontFamily: serif, fontSize: 21, lineHeight: 27, marginBottom: 14 },
   memberGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
   member: { flexGrow: 1, flexBasis: 240, padding: 14, borderWidth: 1, borderColor: '#2a2a2a', borderRadius: 8, backgroundColor: '#0d0d0d' },
   memberPressed: { borderColor: '#4a4235' },
