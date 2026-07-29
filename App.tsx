@@ -97,17 +97,11 @@ function useResponsive() {
   const t = Math.min(Math.max((width - 360) / 740, 0), 1);
   const fluid = (min: number, max: number) => Math.round(min + (max - min) * t);
 
-  const titleSize = fluid(25, 38);
-  const bodySize = fluid(15, 17);
-  const statSize = fluid(22, 30);
-
   return {
     width,
     isNarrow: width < 700,
     gutter: fluid(16, 32),
-    title: { fontSize: titleSize, lineHeight: Math.round(titleSize * 1.15) },
-    body: { fontSize: bodySize, lineHeight: Math.round(bodySize * 1.6) },
-    stat: { fontSize: statSize, lineHeight: Math.round(statSize * 1.15) },
+    prose: { maxWidth: fluid(340, 900) },
   };
 }
 
@@ -122,7 +116,7 @@ function Pill({ label, onPress }: { label: string; onPress: () => void }) {
 function SpecRow({ label, value }: { label: string; value: string }) {
   const r = useResponsive();
   return (
-    <View style={[styles.specRow, r.isNarrow && styles.specRowNarrow]}>
+    <View style={[styles.specRow, r.prose, r.isNarrow && styles.specRowNarrow]}>
       <Text style={styles.specLabel}>{label}</Text>
       <Text style={[styles.specValue, r.isNarrow && styles.specValueNarrow]}>{value}</Text>
     </View>
@@ -161,7 +155,7 @@ function Home() {
   return (
     <View style={styles.page}>
       <Text style={styles.eyebrow}>VANDERBILT UNIVERSITY</Text>
-      <Text style={[styles.title, r.title]}>Welcome to Vanderbilt University Motorsports</Text>
+      <Text style={styles.title}>Welcome to Vanderbilt University Motorsports</Text>
       <View style={styles.rule} />
       
       <View
@@ -176,20 +170,20 @@ function Home() {
         />
       </View>
 
-      <Text style={[styles.paragraph, r.body]}>
+      <Text style={[styles.paragraph, r.prose]}>
         Vanderbilt University Motorsports (VUM) is a student-led engineering team at Vanderbilt University. We design, build, and compete with formula-style race cars
         in collegiate motorsport competitions. Our mission is to provide hands-on engineering experience, promote STEM education, and represent Vanderbilt with
         innovation and performance.
       </Text>
 
       <Text style={styles.subtitle}>What We Do</Text>
-      <Text style={[styles.paragraph, r.body]}>
+      <Text style={[styles.paragraph, r.prose]}>
         Each year our multidisciplinary team of undergraduates works across chassis, powertrain, electronics, and business to produce a competitive
         racecar. Students gain experience in CAD, manufacturing, testing, data acquisition, and project management.
       </Text>
 
       <Text style={styles.subtitle}>Get Involved</Text>
-      <Text style={[styles.paragraph, r.body]}>
+      <Text style={[styles.paragraph, r.prose]}>
         We welcome students from all majors. If you're interested in joining, check the Contact page to reach out to team members or visit our Sponsorship page
         to support the program.
       </Text>
@@ -217,9 +211,9 @@ function Car() {
   return (
     <View style={styles.page}>
       <Text style={styles.eyebrow}>2026 COMPETITION CAR</Text>
-      <Text style={[styles.title, r.title]}>Current Car — VU-83</Text>
+      <Text style={styles.title}>Current Car — VU-83</Text>
       <View style={styles.rule} />
-      <Text style={[styles.paragraph, r.body]}>VU-83 is the car that the team used at the Formula SAE IC Michigan 2026 competition at Michigan International Speedway.</Text>
+      <Text style={[styles.paragraph, r.prose]}>VU-83 is the car that the team used at the Formula SAE IC Michigan 2026 competition at Michigan International Speedway.</Text>
 
       <View
         style={styles.photoContainer}
@@ -235,15 +229,15 @@ function Car() {
       
       <View style={styles.statRow}>
         <View>
-          <Text style={[styles.statValue, r.stat]}>3rd</Text>
+          <Text style={styles.statValue}>3rd</Text>
           <Text style={styles.statLabel}>EFFICIENCY</Text>
         </View>
         <View>
-          <Text style={[styles.statValue, r.stat]}>110+</Text>
+          <Text style={styles.statValue}>110+</Text>
           <Text style={styles.statLabel}>TEAMS</Text>
         </View>
         <View>
-          <Text style={[styles.statValue, r.stat]}>40 lb</Text>
+          <Text style={styles.statValue}>40 lb</Text>
           <Text style={styles.statLabel}>LIGHTEST MARGIN</Text>
         </View>
       </View>
@@ -255,7 +249,7 @@ function Car() {
       <SpecRow label="Brakes" value="Ventilated discs, custom calipers" />
 
       <Text style={styles.subtitle}>HIGHLIGHTS</Text>
-      <Text style={[styles.paragraph, r.body]}>
+      <Text style={[styles.paragraph, r.prose]}>
         Awarded third in efficiency for fuel use over the set distance, made possible by running the lightest car in the competition by roughly 40 lb.
       </Text>
     </View>
@@ -270,33 +264,33 @@ function Sponsor() {
   return (
     <View style={styles.page}>
       <Text style={styles.eyebrow}>PARTNER WITH US</Text>
-      <Text style={[styles.title, r.title]}>Support Vanderbilt University Motorsports</Text>
+      <Text style={styles.title}>Support Vanderbilt University Motorsports</Text>
       <View style={styles.rule} />
 
-      <Text style={[styles.paragraph, r.body]}>
+      <Text style={[styles.paragraph, r.prose]}>
         Sponsorships helps our students purchase parts, access manufacturing resources, attend competitions, and focus on engineering education. We offer
         corporate and individual sponsorship packages with recognition opportunities, testing access, and collaborative engineering projects.
       </Text>
 
     
-      <Text style={[styles.paragraph, r.body]}>
+      <Text style={[styles.paragraph, r.prose]}>
         We also welcome in-kind support such as materials, machining time, software licenses, and mentorship. Thank you for considering supporting VUM.
       </Text>
 
       <Text style={styles.subtitle}>Sponsorship Tiers</Text>
-      <Text style={[styles.paragraph, r.body]}>• Bronze — Logo on team page, social media mention</Text>
-      <Text style={[styles.paragraph, r.body]}>• Silver — Bronze benefits + logo on the car and event banners</Text>
-      <Text style={[styles.paragraph, r.body]}>• Gold — Silver benefits + engineering collaboration and on-site demonstrations</Text>
+      <Text style={[styles.paragraph, r.prose]}>• Bronze — Logo on team page, social media mention</Text>
+      <Text style={[styles.paragraph, r.prose]}>• Silver — Bronze benefits + logo on the car and event banners</Text>
+      <Text style={[styles.paragraph, r.prose]}>• Gold — Silver benefits + engineering collaboration and on-site demonstrations</Text>
 
       <Text style={styles.subtitle}>Contact to Sponsor</Text>
-      <Text style={[styles.paragraph, r.body]}>For sponsorship inquiries and custom packages, email us:</Text>
+      <Text style={[styles.paragraph, r.prose]}>For sponsorship inquiries and custom packages, email us:</Text>
 
       <Pressable style={styles.sponsorButton} onPress={openEmail}>
         <Text style={styles.sponsorButtonText}>Email our Team</Text>
       </Pressable>
 
       <Text style={styles.subtitle}>Donations</Text>
-      <Text style={[styles.paragraph, r.body]}>If you are interesting in donating to the team, click below:</Text>
+      <Text style={[styles.paragraph, r.prose]}>If you are interesting in donating to the team, click below:</Text>
 
       <Pressable style={styles.sponsorButton} onPress={openDonate}>
         <Text style={styles.sponsorButtonText}>Donate</Text>
@@ -347,10 +341,10 @@ function Contact() {
   return (
     <View style={styles.page}>
       <Text style={styles.eyebrow}>GET IN TOUCH</Text>
-      <Text style={[styles.title, r.title]}>Contact the Team</Text>
+      <Text style={styles.title}>Contact the Team</Text>
       <View style={styles.rule} />
 
-      <Text style={[styles.paragraph, r.body]}>
+      <Text style={[styles.paragraph, r.prose]}>
         Reach out to our student leads for specific questions about engineering, sponsorship, or joining the team.
       </Text>
 
@@ -394,14 +388,14 @@ const styles = StyleSheet.create({
   title: { fontFamily: serif, fontSize: 38, color: '#fff', marginBottom: 8, lineHeight: 42 },
   rule: { width: 40, height: 2, backgroundColor: GOLD, marginBottom: 20 },
   subtitle: { color: GOLD_DIM, fontSize: 11, letterSpacing: 1.4, marginTop: 36, marginBottom: 10 },
-  paragraph: { fontSize: 16, color: BODY, lineHeight: 26, marginBottom: 16, maxWidth: 680, width: '100%' },
+  paragraph: { fontSize: 16, color: BODY, lineHeight: 26, marginBottom: 16, width: '100%' },
   photoContainer: { marginBottom: 28, borderRadius: 8, overflow: 'hidden' },
   photo: { width: '100%', resizeMode: 'cover' },
   carPhoto: { width: '100%', resizeMode: 'cover' },
-  statRow: { flexDirection: 'row', gap: 24, rowGap: 16, flexWrap: 'wrap', paddingVertical: 18, borderTopWidth: 1, borderBottomWidth: 1, borderColor: RULE, marginBottom: 8 },
+  statRow: { flexDirection: 'row', gap: 32, flexWrap: 'wrap', paddingVertical: 18, borderTopWidth: 1, borderBottomWidth: 1, borderColor: RULE, marginBottom: 8 },
   statValue: { color: GOLD, fontFamily: serif, fontSize: 30, lineHeight: 34 },
   statLabel: { color: '#777', fontSize: 11, letterSpacing: 0.8, marginTop: 4 },
-  specRow: { flexDirection: 'row', justifyContent: 'space-between', gap: 20, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: RULE, maxWidth: 680, width: '100%' },
+  specRow: { flexDirection: 'row', justifyContent: 'space-between', gap: 20, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: RULE, width: '100%' },
   specRowNarrow: { flexDirection: 'column', gap: 4 },
   specLabel: { color: '#777', fontSize: 12, letterSpacing: 0.6 },
   specValue: { color: '#e8e8e4', fontSize: 14, textAlign: 'right', flexShrink: 1 },
