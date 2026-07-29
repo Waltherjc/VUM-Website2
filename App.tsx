@@ -56,7 +56,7 @@ export default function App() {
   return (
     <SafeAreaView style={styles.safe}>
       <View style={[styles.header, { paddingHorizontal: r.gutter }]}>
-        <View style={styles.headerInner}>
+        <View style={[styles.headerInner, r.stackHeader && styles.headerInnerStacked]}>
           <View style={styles.brandBlock}>
             <Image
               source={require('./assets/VUM-logo.jpg')}
@@ -64,9 +64,9 @@ export default function App() {
               accessible={true}
               accessibilityLabel="Vanderbilt University Motorsports logo"
             />
-            <View>
-              <Text style={styles.brand}>Vanderbilt Motorsports</Text>
-              <Text style={styles.brandSub}>FORMULA SAE</Text>
+            <View style={styles.brandText}>
+              <Text style={styles.brand} numberOfLines={1}>Vanderbilt Motorsports</Text>
+              <Text style={styles.brandSub} numberOfLines={1}>FORMULA SAE</Text>
             </View>
           </View>
           <View style={styles.nav}>
@@ -100,6 +100,7 @@ function useResponsive() {
   return {
     width,
     isNarrow: width < 700,
+    stackHeader: width < 600,
     gutter: fluid(16, 32),
     prose: { maxWidth: fluid(340, 900) },
   };
@@ -372,11 +373,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#000'
   },
   headerInner: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 16, maxWidth: 1100, width: '100%', alignSelf: 'center' },
-  brandBlock: { flexDirection: 'row', alignItems: 'center', gap: 10, flexShrink: 1 },
-  brand: { color: '#fff', fontFamily: serif, fontSize: 18 },
+  headerInnerStacked: { flexDirection: 'column', alignItems: 'flex-start', gap: 12 },
+  brandBlock: { flexDirection: 'row', alignItems: 'center', gap: 10, flexShrink: 1, minWidth: 0 },
+  brandText: { flexShrink: 1, minWidth: 0 },
+  brand: { color: '#fff', fontFamily: serif, fontSize: 18, flexShrink: 1 },
   brandSub: { color: '#6e6650', fontSize: 10, letterSpacing: 1.1, marginTop: 1 },
   logo: { width: 36, height: 36, borderRadius: 4 },
-  nav: { flexDirection: 'row', gap: 18, flexWrap: 'wrap' },
+  nav: { flexDirection: 'row', gap: 18, flexWrap: 'wrap', flexShrink: 0 },
   navButton: { paddingBottom: 4, borderBottomWidth: 2, borderBottomColor: 'transparent' },
   navButtonPressed: { opacity: 0.6 },
   navButtonActive: { borderBottomColor: GOLD },
