@@ -55,20 +55,25 @@ export default function App() {
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.header}>
-        <Text style={styles.brand}>Vanderbilt University Motorsports</Text>
-        <View style={styles.navRow}>
+        <View style={styles.headerInner}>
+          <View style={styles.brandBlock}>
+            <Image
+              source={require('./assets/VUM-logo.jpg')}
+              style={styles.logo}
+              accessible={true}
+              accessibilityLabel="Vanderbilt University Motorsports logo"
+            />
+            <View>
+              <Text style={styles.brand}>Vanderbilt Motorsports</Text>
+              <Text style={styles.brandSub}>FORMULA SAE</Text>
+            </View>
+          </View>
           <View style={styles.nav}>
             <NavButton label="Home" onPress={() => navigate('home')} active={route === 'home'} />
-            <NavButton label="Current Car" onPress={() => navigate('car')} active={route === 'car'} />
-            <NavButton label="Sponsorship" onPress={() => navigate('sponsor')} active={route === 'sponsor'} />
+            <NavButton label="Car" onPress={() => navigate('car')} active={route === 'car'} />
+            <NavButton label="Sponsor" onPress={() => navigate('sponsor')} active={route === 'sponsor'} />
             <NavButton label="Contact" onPress={() => navigate('contact')} active={route === 'contact'} />
           </View>
-          <Image
-            source={require('./assets/VUM-logo.jpg')}
-            style={styles.logo}
-            accessible={true}
-            accessibilityLabel="Vanderbilt University Motorsports logo"
-          />
         </View>
       </View>
 
@@ -84,6 +89,35 @@ export default function App() {
       </View>
     </SafeAreaView>
   );
+}
+
+function Pill({ label, onPress }: { label: string; onPress: () => void }) {
+  return (
+    <Pressable onPress={onPress} style={({ pressed }) => [styles.pill, pressed && styles.pillPressed]}>
+      <Text style={styles.pillText}>{label}</Text>
+    </Pressable>
+  );
+}
+
+function SpecRow({ label, value }: { label: string; value: string }) {
+  return (
+    <View style={styles.specRow}>
+      <Text style={styles.specLabel}>{label}</Text>
+      <Text style={styles.specValue}>{value}</Text>
+    </View>
+  );
+}
+
+function initials(name: string) {
+  return name.split(' ').map(p => p[0]).join('').slice(0, 2).toUpperCase();
+}
+
+function shortMajor(major: string) {
+  return major
+    .replace('Mechanical Engineering', 'ME')
+    .replace('Electrical and Computer Engineering', 'ECE')
+    .replace('Computer Science', 'CS')
+    .replace('Human and Organizational Development', 'HOD');
 }
 
 function NavButton({ label, onPress, active }: { label: string; onPress: () => void; active?: boolean }) {
@@ -104,7 +138,9 @@ function Home() {
   
   return (
     <View style={styles.page}>
+      <Text style={styles.eyebrow}>VANDERBILT UNIVERSITY</Text>
       <Text style={styles.title}>Welcome to Vanderbilt University Motorsports</Text>
+      <View style={styles.rule} />
       
       <View
         style={styles.photoContainer}
@@ -136,27 +172,16 @@ function Home() {
         to support the program.
       </Text>
 
-      <Text style={styles.subtitle}>Links</Text>
-      <Text style={styles.paragraph}>Below are ways to connect to the team:</Text>
+      <Text style={styles.subtitle}>FOLLOW THE TEAM</Text>
+      <View style={styles.pillRow}>
+        <Pill label="LinkedIn" onPress={openLinkedIn} />
+        <Pill label="Instagram" onPress={openInstagram} />
+        <Pill label="TikTok" onPress={openTiktok} />
+        <Pill label="AnchorLink" onPress={openAnchorLink} />
+      </View>
 
-      <Pressable style={styles.sponsorButton} onPress={openLinkedIn}>
-        <Text style={styles.sponsorButtonText}>Linkedin</Text>
-      </Pressable>
-
-      <Pressable style={styles.sponsorButton} onPress={openAnchorLink}>
-        <Text style={styles.sponsorButtonText}>AnchorLink</Text>
-      </Pressable>
-
-      <Pressable style={styles.sponsorButton} onPress={openInstagram}>
-        <Text style={styles.sponsorButtonText}>Instagram</Text>
-      </Pressable>
-
-      <Pressable style={styles.sponsorButton} onPress={openTiktok}>
-        <Text style={styles.sponsorButtonText}>TikTok</Text>
-      </Pressable>
-
-      <Pressable style={styles.sponsorButton} onPress={openEmail}>
-        <Text style={styles.sponsorButtonText}>Email</Text>
+      <Pressable style={({ pressed }) => [styles.sponsorButton, pressed && styles.sponsorButtonPressed]} onPress={openEmail}>
+        <Text style={styles.sponsorButtonText}>Join the team</Text>
       </Pressable>
       
     </View>
@@ -168,7 +193,9 @@ function Car() {
 
   return (
     <View style={styles.page}>
+      <Text style={styles.eyebrow}>2026 COMPETITION CAR</Text>
       <Text style={styles.title}>Current Car — VU-83</Text>
+      <View style={styles.rule} />
       <Text style={styles.paragraph}>VU-83 is the car that the team used at the Formula SAE IC Michigan 2026 competition at Michigan International Speedway.</Text>
 
       <View
@@ -183,15 +210,30 @@ function Car() {
         />
       </View>
       
-      <Text style={styles.subtitle}>Key Specifications</Text>
-      <Text style={styles.paragraph}>• Chassis: Hand-assembled steel tubing</Text>
-      <Text style={styles.paragraph}>• Powertrain: 439cc Yamaha YFZ450S</Text>
-      <Text style={styles.paragraph}>• Suspension: Double-wishbone adjustable dampers</Text>
-      <Text style={styles.paragraph}>• Brakes: Lightweight ventilated discs with custom calipers</Text>
+      <View style={styles.statRow}>
+        <View>
+          <Text style={styles.statValue}>3rd</Text>
+          <Text style={styles.statLabel}>EFFICIENCY</Text>
+        </View>
+        <View>
+          <Text style={styles.statValue}>110+</Text>
+          <Text style={styles.statLabel}>TEAMS</Text>
+        </View>
+        <View>
+          <Text style={styles.statValue}>40 lb</Text>
+          <Text style={styles.statLabel}>LIGHTEST MARGIN</Text>
+        </View>
+      </View>
 
-      <Text style={styles.subtitle}>Recent Highlights</Text>
+      <Text style={styles.subtitle}>SPECIFICATIONS</Text>
+      <SpecRow label="Chassis" value="Hand-assembled steel tubing" />
+      <SpecRow label="Powertrain" value="439cc Yamaha YFZ450S" />
+      <SpecRow label="Suspension" value="Double-wishbone, adjustable dampers" />
+      <SpecRow label="Brakes" value="Ventilated discs, custom calipers" />
+
+      <Text style={styles.subtitle}>HIGHLIGHTS</Text>
       <Text style={styles.paragraph}>
-        VU-83 brought home 3rd place in efficiency in a field of over 110 teams. It was awarded for efficiently using fuel over the set distance, made possible by having the lightest car in the competition by around 40 lbs.
+        Awarded third in efficiency for fuel use over the set distance, made possible by running the lightest car in the competition by roughly 40 lb.
       </Text>
     </View>
   );
@@ -203,7 +245,9 @@ function Sponsor() {
 
   return (
     <View style={styles.page}>
+      <Text style={styles.eyebrow}>PARTNER WITH US</Text>
       <Text style={styles.title}>Support Vanderbilt University Motorsports</Text>
+      <View style={styles.rule} />
 
       <Text style={styles.paragraph}>
         Sponsorships helps our students purchase parts, access manufacturing resources, attend competitions, and focus on engineering education. We offer
@@ -245,34 +289,41 @@ function Contact() {
   const returningMembers = TEAM_MEMBERS.filter(m => m.category === 'returning');
   const facultyAdvisors = TEAM_MEMBERS.filter(m => m.category === 'faculty');
 
-  const MemberCard = ({ member }: { member: Member }) => (
-    <View style={styles.member}>
+  const MemberCard: React.FC<{ member: Member }> = ({ member }) => (
+    <Pressable
+      onPress={() => openMail(member.email)}
+      style={({ pressed }) => [styles.member, pressed && styles.memberPressed]}
+    >
+      <View style={styles.avatar}>
+        <Text style={styles.avatarText}>{initials(member.name)}</Text>
+      </View>
       <Text style={styles.memberName}>{member.name}</Text>
       {member.category !== 'faculty' && (
         <>
           <Text style={styles.memberRole}>{member.role}</Text>
-          <Text style={styles.memberMajor}>{member.major}</Text>
-          <Text style={styles.memberYear}>{member.year}</Text>
+          <Text style={styles.memberMeta}>{shortMajor(member.major)} · {member.year}</Text>
         </>
       )}
-      <Pressable onPress={() => openMail(member.email)}>
-        <Text style={styles.memberEmail}>{member.email}</Text>
-      </Pressable>
-    </View>
+      <Text style={styles.memberEmail}>{member.email}</Text>
+    </Pressable>
   );
 
-  const MemberSection = ({ title, members }: { title: string; members: Member[] }) => (
+  const MemberSection: React.FC<{ title: string; members: Member[] }> = ({ title, members }) => (
     <View style={styles.memberSection}>
       <Text style={styles.sectionTitle}>{title}</Text>
-      {members.map((m) => (
-        <MemberCard key={m.email} member={m} />
-      ))}
+      <View style={styles.memberGrid}>
+        {members.map((m) => (
+          <MemberCard key={m.email} member={m} />
+        ))}
+      </View>
     </View>
   );
 
   return (
     <View style={styles.page}>
+      <Text style={styles.eyebrow}>GET IN TOUCH</Text>
       <Text style={styles.title}>Contact the Team</Text>
+      <View style={styles.rule} />
 
       <Text style={styles.paragraph}>
         Reach out to our student leads for specific questions about engineering, sponsorship, or joining the team.
@@ -285,47 +336,67 @@ function Contact() {
   );
 }
 
+const serif = Platform.OS === 'web' ? 'Georgia, "Times New Roman", serif' : 'serif';
+
+const GOLD = '#a89669';
+const GOLD_DIM = '#8a7a55';
+const BODY = '#9a9a95';
+const RULE = '#1e1e1e';
+
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: '#000' },
   header: {
-    padding: 18,
+    paddingVertical: 14,
+    paddingHorizontal: 24,
     borderBottomWidth: 1,
-    borderBottomColor: '#333',
+    borderBottomColor: '#2a2418',
     backgroundColor: '#000'
   },
-  brand: { color: '#a89669', fontSize: 20, fontWeight: '700', marginBottom: 8 },
-  navRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  nav: { flexDirection: 'row', gap: 10, flexWrap: 'wrap' },
-  logo: { width: 48, height: 48, borderRadius: 24, marginLeft: 12 },
-  navButton: {
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 6,
-    backgroundColor: 'transparent'
-  },
-  navButtonPressed: { opacity: 0.7 },
-  navButtonActive: { backgroundColor: '#a89669' },
-  navButtonText: { color: '#fff', fontWeight: '600' },
-  navButtonTextActive: { color: '#000' },
-  content: { padding: 24, paddingBottom: 120, backgroundColor: '#000' },
-  page: { maxWidth: 900, alignSelf: 'center' },
-  photoContainer: { marginBottom: 20, borderRadius: 8, overflow: 'hidden', borderWidth: 2, borderColor: '#a89669' },
+  headerInner: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 16, maxWidth: 1100, width: '100%', alignSelf: 'center' },
+  brandBlock: { flexDirection: 'row', alignItems: 'center', gap: 10, flexShrink: 1 },
+  brand: { color: '#fff', fontFamily: serif, fontSize: 18 },
+  brandSub: { color: '#6e6650', fontSize: 10, letterSpacing: 1.1, marginTop: 1 },
+  logo: { width: 36, height: 36, borderRadius: 4 },
+  nav: { flexDirection: 'row', gap: 18, flexWrap: 'wrap' },
+  navButton: { paddingBottom: 4, borderBottomWidth: 2, borderBottomColor: 'transparent' },
+  navButtonPressed: { opacity: 0.6 },
+  navButtonActive: { borderBottomColor: GOLD },
+  navButtonText: { color: '#8c8c86', fontSize: 14 },
+  navButtonTextActive: { color: '#fff' },
+  content: { paddingHorizontal: 24, paddingTop: 32, paddingBottom: 120, backgroundColor: '#000' },
+  page: { maxWidth: 1100, width: '100%', alignSelf: 'center' },
+  eyebrow: { color: GOLD_DIM, fontSize: 11, letterSpacing: 1.4, marginBottom: 6 },
+  title: { fontFamily: serif, fontSize: 38, color: '#fff', marginBottom: 8, lineHeight: 42 },
+  rule: { width: 40, height: 2, backgroundColor: GOLD, marginBottom: 20 },
+  subtitle: { color: GOLD_DIM, fontSize: 11, letterSpacing: 1.4, marginTop: 36, marginBottom: 10 },
+  paragraph: { fontSize: 16, color: BODY, lineHeight: 26, marginBottom: 16, maxWidth: 680 },
+  photoContainer: { marginBottom: 28, borderRadius: 8, overflow: 'hidden' },
   photo: { width: '100%', resizeMode: 'cover' },
   carPhoto: { width: '100%', resizeMode: 'cover' },
-  title: { fontSize: 28, fontWeight: '800', marginBottom: 12, color: '#a89669' },
-  subtitle: { fontSize: 18, fontWeight: '700', marginTop: 12, marginBottom: 6, color: '#a89669' },
-  paragraph: { fontSize: 16, color: '#fff', lineHeight: 22, marginBottom: 8 },
-  sponsorButton: { backgroundColor: '#a89669', paddingVertical: 12, paddingHorizontal: 16, borderRadius: 8, alignSelf: 'flex-start', marginTop: 8, marginBottom: 12 },
-  sponsorButtonText: { color: '#000', fontWeight: '700' },
-  footer: { padding: 16, borderTopWidth: 1, borderTopColor: '#333', alignItems: 'center', backgroundColor: '#000' },
-  footerText: { color: '#999' },
-  members: { marginTop: 12 },
-  memberSection: { marginTop: 20, marginBottom: 20 },
-  sectionTitle: { fontSize: 18, fontWeight: '700', color: '#a89669', marginBottom: 12, paddingBottomWidth: 2, borderBottomWidth: 1, borderBottomColor: '#444', paddingBottom: 8 },
-  member: { marginBottom: 12, padding: 12, borderWidth: 1, borderColor: '#333', borderRadius: 8, backgroundColor: '#111' },
-  memberName: { fontWeight: '700', color: '#a89669', fontSize: 16 },
-  memberRole: { color: '#ccc', marginBottom: 4, fontSize: 14 },
-  memberMajor: { color: '#aaa', marginBottom: 4, fontSize: 13 },
-  memberYear: { color: '#999', marginBottom: 8, fontSize: 13 },
-  memberEmail: { color: '#a89669', marginTop: 8 },
+  statRow: { flexDirection: 'row', gap: 32, flexWrap: 'wrap', paddingVertical: 18, borderTopWidth: 1, borderBottomWidth: 1, borderColor: RULE, marginBottom: 8 },
+  statValue: { color: GOLD, fontFamily: serif, fontSize: 30, lineHeight: 34 },
+  statLabel: { color: '#777', fontSize: 11, letterSpacing: 0.8, marginTop: 4 },
+  specRow: { flexDirection: 'row', justifyContent: 'space-between', gap: 20, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: RULE, maxWidth: 680 },
+  specLabel: { color: '#777', fontSize: 12, letterSpacing: 0.6 },
+  specValue: { color: '#e8e8e4', fontSize: 14, textAlign: 'right', flexShrink: 1 },
+  pillRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 24 },
+  pill: { borderWidth: 1, borderColor: '#4a4235', borderRadius: 999, paddingVertical: 8, paddingHorizontal: 14 },
+  pillPressed: { borderColor: GOLD, opacity: 0.8 },
+  pillText: { color: '#d8cbaa', fontSize: 13 },
+  sponsorButton: { backgroundColor: GOLD, paddingVertical: 12, paddingHorizontal: 18, borderRadius: 8, alignSelf: 'flex-start', marginTop: 4, marginBottom: 12 },
+  sponsorButtonPressed: { opacity: 0.85 },
+  sponsorButtonText: { color: '#3a3222', fontWeight: '500', fontSize: 14 },
+  footer: { paddingVertical: 20, paddingHorizontal: 24, borderTopWidth: 1, borderTopColor: RULE, alignItems: 'center', backgroundColor: '#000' },
+  footerText: { color: '#666', fontSize: 12 },
+  memberSection: { marginTop: 36 },
+  sectionTitle: { color: GOLD_DIM, fontSize: 11, letterSpacing: 1.4, marginBottom: 14 },
+  memberGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
+  member: { width: 250, padding: 14, borderWidth: 1, borderColor: '#2a2a2a', borderRadius: 8, backgroundColor: '#0d0d0d' },
+  memberPressed: { borderColor: '#4a4235' },
+  avatar: { width: 30, height: 30, borderRadius: 15, backgroundColor: '#2c2617', alignItems: 'center', justifyContent: 'center', marginBottom: 10 },
+  avatarText: { color: '#c9b688', fontSize: 11 },
+  memberName: { color: '#fff', fontSize: 14, fontWeight: '500' },
+  memberRole: { color: GOLD_DIM, fontSize: 12, marginTop: 3 },
+  memberMeta: { color: '#777', fontSize: 12, marginTop: 2 },
+  memberEmail: { color: '#666', fontSize: 11, marginTop: 8 },
 });
